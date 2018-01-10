@@ -10,6 +10,8 @@ const todos = [{
   text: 'Second test todo'
 }];
 
+// testing lifecycle method
+// gonna let us run some code before some test case
 beforeEach((done) => {
   Todo.remove({}).then(() => {
     return Todo.insertMany(todos);
@@ -32,6 +34,7 @@ describe('POST /todos', () => {
         return done(err);
       }
 
+      // make request to the database fetching all the todos verifying out todo was added
       Todo.find({text}).then((todos) => {
         expect(todos.length).toBe(1);
         expect(todos[0].text).toBe(text);
@@ -58,6 +61,7 @@ describe('POST /todos', () => {
   });
 });
 
+// test case for HTTP GET request
 describe('GET /todos', () => {
   it('should get all todos', (done) => {
     request(app)

@@ -8,6 +8,7 @@ var { Todo } = require('./models/todo');
 var { User } = require('./models/user');
 
 var app = express();
+const port = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
 
@@ -58,19 +59,30 @@ app.get('/todos/:id', (req, res) => {
 
 });
 
-  // Valid id using isValid
-    // 404 - send back an empty body
+app.delete('/todos/:id', (req, res) => {
+  // var id = req.params.id;
+  // console.log(id);
 
-  // query by findById
-    // success
-      // if todo - send it back
-      // if no todo -send back 404 with empty body
-      // error
-        // 400 - and send empty body back
+  if(!ObjectId.isValid) {
+    return res.status(404).send();
+  }
+
+  Todo.findOnendRemove({_id: new ObjectId('5a56fa01a6a7dcacb4bb990e')}).then((todo) => {
+    if(!todo) {
+      return res.status(404).send();
+    }
+    res.send({
+      status: "400",
+      todo
+    }).catch((e) => {
+      res.status(400).send();
+    });
+  });
+});
 
 
-app.listen(3000, () => {
-  console.log('Started on port 3000');
+app.listen(port, () => {
+  console.log(`Started up at port ${port}`);
 });
 
 module.exports = { app };
